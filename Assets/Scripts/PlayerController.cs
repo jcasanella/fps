@@ -6,7 +6,9 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField]
-    private float speed = 5f;
+    private float speed = 15.0f;
+    [SerializeField]
+    private float mouseSensitivity = 3.0f;
 
     private PlayerMotor playerMotor;
 
@@ -26,6 +28,16 @@ public class PlayerController : MonoBehaviour
         Vector3 movHorizontal = xMov * transform.right;
         Vector3 movVertical = zMov * transform.forward;
         Vector3 velocity = (movHorizontal + movVertical).normalized * speed;
-        //playerMotor.Move(velocity);
+        playerMotor.Move(velocity);
+
+        // Calculate Rotation - player
+        float yRot = Input.GetAxisRaw("Mouse X");
+        Vector3 rotation = new Vector3(0.0f, yRot, 0.0f) * mouseSensitivity;
+        playerMotor.Rotate(rotation);
+
+        // Calculate Rotation - camera
+        float xRot = Input.GetAxisRaw("Mouse Y");
+        Vector3 cameraRotation = new Vector3(xRot, 0.0f, 0.0f);
+        playerMotor.RotateCamera(cameraRotation);
     }
 }
